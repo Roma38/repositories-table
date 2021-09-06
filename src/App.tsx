@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import { Container, Dimmer, Loader, Header } from 'semantic-ui-react';
+import { API_URL } from './constants';
+import { Repository } from './types';
+import HomePage from './components/HomePage';
+import './App.scss';
 
 function App() {
+  const [data, setData] = useState<null | Repository[]>(null);
+
+  useEffect(() => {
+    // TODO: handle errors
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        setData(data);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className="App">
+      <Header as='h1'>Repositories Table</Header>
+      {data 
+        ? <HomePage data={data} /> 
+        : <Dimmer active>
+          <Loader>Loading</Loader>
+        </Dimmer>}
+
+    </Container>
   );
 }
 
