@@ -4,7 +4,7 @@ interface Owner {
 }
 
 export interface Repository {
-  id: string;
+  id: number;
   owner: Owner;
   name: string;
   html_url: string;

@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { Input, Pagination } from 'semantic-ui-react';
+import { Input, Message, Pagination } from 'semantic-ui-react';
 import { ITEMS_PER_PAGE } from '../constants';
 import { Repository } from '../types';
 import ReposTable from './ReposTable';
 
-function HomePage ({data}: {data: Repository[]}) {
+function HomePage ({ data }: {data: Repository[]}) {
   const [search, setSearch] = useState('');
   const [activePage, setActivePage] = useState(1);
 
-  const filtredData = data
+  const filteredData: Repository[] = data
     .filter(({ owner, name }) => owner.login.includes(search) || name.includes(search));
-  const currentPageItems = filtredData
+  const currentPageItems: Repository[] = filteredData
     .slice(activePage * ITEMS_PER_PAGE - ITEMS_PER_PAGE, activePage * ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(filtredData.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
 
-  if (activePage > totalPages) setActivePage(totalPages);
+  if (totalPages && (activePage > totalPages)) setActivePage(totalPages);
   
   return <>
     <Input value={search} 
@@ -34,7 +34,9 @@ function HomePage ({data}: {data: Repository[]}) {
         totalPages={totalPages}
       />
     </div>
-    <ReposTable data={currentPageItems} />
+    { currentPageItems.length ?
+      <ReposTable data={currentPageItems} /> :
+      <Message negative>No results found for <i>{search}</i></Message> }
   </>
 }
 

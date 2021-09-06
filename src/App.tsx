@@ -11,21 +11,18 @@ function App() {
   useEffect(() => {
     // TODO: handle errors
     fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        setData(data);
-      });
+      .then(response => response.json())
+      .then(data => setData(data));
   }, []);
 
   return (
     <Container className="App">
       <Header as='h1'>Repositories Table</Header>
-      {data 
-        ? <HomePage data={data} /> 
-        : <Dimmer active>
+      { data ? 
+        <HomePage data={data} /> : 
+        <Dimmer active>
           <Loader>Loading</Loader>
-        </Dimmer>}
+        </Dimmer> }
 
     </Container>
   );
